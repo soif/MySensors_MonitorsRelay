@@ -2,9 +2,10 @@
 
 ## Introduction
 
-I've two screens attached to my main computer. I prefer to put it to sleep rather than shut it down every day , so I have to shutdown both screens everey evening, and turn them up every morning. As I am lazy, I've designed this node, to be able to either manually turn them on/off, or better, to automatically turn them off/on whenever the computer goes to sleep or wake up.
+I've two screens attached to my main computer. I prefer to put it to sleep rather than shut it down every day , so I have to shutdown both screens everey evening, and turn them up every morning. 
+As I am lazy, I've designed this node, to be able to either manually turn them on/off, or better, to automatically turn them off/on whenever the computer goes to sleep or wake up.
 
-As always when adding a node into a room, I've' also integrated a sensor to report the romm's temperature, instead of building a separate one.
+As always when adding a node into a room, I've also integrated a sensor to report the romm's temperature, instead of building a separate one.
 
 
 ## Features
@@ -16,9 +17,9 @@ This [MySensors](https://www.mysensors.org/)  node provides the following featur
 - Toggle the Device state using a single push button
 - Feedback the device state using 2 leds (Green and Red)
 - also reports Room temperature every minutes
-- reovers the last state when powering up
+- recovers the last state when powering up
 - blinks the green led while sending the temperature
-- blinks the red led while receiving a rely command
+- blinks the red led while receiving a relay command
 
 
 ## Script to trigger Switching the node upon Computer Sleep / WakeUp
