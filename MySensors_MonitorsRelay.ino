@@ -41,7 +41,7 @@
 #define CHILD_ID_TEMP		1
 
 #define REPORT_TEMP_SEC		60		// report temperature every x seconds
-#define DEBOUNCE_TIME		50		// Button Debounce time (ms)
+#define DEBOUNCE_TIME		100		// Button Debounce time (ms)
 #define RELAY_ON			HIGH	// my Relay use LOW for ON, but I use 'NC' instead of 'NO' pins
 #define RELAY_OFF			LOW		// my Relay use HIGH for OFF, but I use 'NC' instead of 'NO' pins
 
