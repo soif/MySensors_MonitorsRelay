@@ -90,6 +90,8 @@ void loop() {
 			DEBUG_PRINTLN("BUTTON Toggle !!");
 			Toggle();
 			send(msgRelay.set(is_on), true); // Send new state and request ack back
+			DEBUG_PRINT("<-- Sending Relay State : "); 
+			DEBUG_PRINTLN(is_on); 
 		}
 
 		// Dallas 1820 Sensor ---------------
@@ -121,12 +123,12 @@ void presentation(){
 // --------------------------------------------------------------------
 void receive(const MyMessage &message){
 	if (message.isAck() ) {
-		DEBUG_PRINTLN(" -> ACK from gateway IGNORED !");
+		DEBUG_PRINTLN("--> ACK from gateway IGNORED !");
 		return;
 	}
 
 	if (message.type == V_LIGHT) {
-		DEBUG_PRINT(" ->Incoming change for sensor: ");
+		DEBUG_PRINT("--> Receiving change for sensor: ");
 		DEBUG_PRINT(message.sensor);
 		DEBUG_PRINT(", New state: ");
 		DEBUG_PRINTLN(message.getBool());
@@ -139,9 +141,9 @@ void receive(const MyMessage &message){
 // --------------------------------------------------------------------
 void before(){
 	Serial.begin(115000);
-	DEBUG_PRINTLN("+++++++++++++");
+	DEBUG_PRINTLN("++++++++++++++");
 	DEBUG_PRINTLN(" Booting...");
-	DEBUG_PRINTLN("+++++++++++++");
+	DEBUG_PRINTLN("++++++++++++++");
 
 	pinMode(PIN_LED_BOOT,	OUTPUT);
 	digitalWrite(PIN_LED_BOOT,	LOW);
@@ -172,7 +174,7 @@ void before(){
  	dallas.begin();
 	dallas.setWaitForConversion(false);
 
-	DEBUG_PRINTLN("++++ Boot END +++++++++");
+	DEBUG_PRINTLN("++ Boot END ++");
 
 }
 
@@ -184,6 +186,8 @@ void InitialState(){
 	   	init_msg_sent = true;
 		Switch(loadState(CHILD_ID_RELAY)); 	// start as lastsaved
 		send(msgRelay.set(is_on), true); // Send new state and request ack back
+		DEBUG_PRINT("<-- Sending Relay State : "); 
+		DEBUG_PRINTLN(is_on); 
 
 		DEBUG_PRINTLN("_initialState END");
 	}
@@ -217,7 +221,7 @@ void Switch(boolean state){
 	// Store state in eeprom
 	saveState(CHILD_ID_RELAY, is_on);
 	
-	DEBUG_PRINT("##### Switched to : "); DEBUG_PRINT(is_on); DEBUG_PRINTLN(" ##############");
+	DEBUG_PRINT("### Switched to : "); DEBUG_PRINT(is_on); DEBUG_PRINTLN(" ###");
 }
 
 // --------------------------------------------------------------------
@@ -242,7 +246,7 @@ void ProcessTemperature(){
 					dallasTemp = dallasTemp * 1.8 + 32.0;
 				}
 				lastDallasTemp = dallasTemp;
-				DEBUG_PRINT("--> Sending New Temperature : "); 
+				DEBUG_PRINT("<--- Sending New Temperature : "); 
 				DEBUG_PRINTLN(dallasTemp);
 				send(msgTemp.set(dallasTemp, true)); // Send new temp and request ack back
 				LedAnim(PIN_LED_GREEN);
