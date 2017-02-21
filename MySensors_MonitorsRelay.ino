@@ -19,16 +19,16 @@
 #define INFO_VERS "2.1.00"
 
 // MySensors
-#define MY_RADIO_NRF24
-#define MY_NODE_ID 101
+#define MY_RADIO_NRF24		// radio module used
+#define MY_NODE_ID 101		// Node ID
 
 //https://forum.mysensors.org/topic/5778/mys-library-startup-control-after-onregistration/7
-#define MY_TRANSPORT_WAIT_READY_MS (5*1000ul)	//set how long to wait for transport ready. in milliseconds
-//#define MY_TRANSPORT_SANITY_CHECK
-//#define MY_TRANSPORT_SANITY_CHECK_INTERVAL_MS (15*60*1000ul) // already set as default
-//#define MY_TRANSPORT_TIMEOUT_EXT_FAILURE_STATE (15*60*1000ul)
+#define MY_TRANSPORT_WAIT_READY_MS (5*1000ul)					// how long to wait for transport ready at boot
+#define MY_TRANSPORT_SANITY_CHECK								// check if transport is available
+#define MY_TRANSPORT_SANITY_CHECK_INTERVAL_MS (15*60*1000ul)	// how often to  check if transport is available (already set as default)
+#define MY_TRANSPORT_TIMEOUT_EXT_FAILURE_STATE (5*60*1000ul)	//  how often to reconnect if no transport
 
-//#define MY_REPEATER_FEATURE
+#define MY_REPEATER_FEATURE		// set as Repeater
 
 #define PIN_RELAY			2
 #define PIN_ONEWIRE			3
