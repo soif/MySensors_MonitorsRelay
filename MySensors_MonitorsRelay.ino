@@ -110,14 +110,14 @@ void loop() {
 
 // --------------------------------------------------------------------
 void presentation(){
-	DEBUG_PRINTLN("_presentation START");
+	DEBUG_PRINTLN("---- presentation START -------");
 	sendSketchInfo(INFO_NAME , INFO_VERS );
 
 	present(CHILD_ID_RELAY, 	S_LIGHT);  
 	present(CHILD_ID_TEMP,	S_TEMP); 
 //	metric = getConfig().isMetric;
 
-	DEBUG_PRINTLN("_presentation END");
+	DEBUG_PRINTLN("---- presentation END   -------");
 }
 
 // --------------------------------------------------------------------
@@ -181,7 +181,7 @@ void before(){
 // --------------------------------------------------------------------
 void InitialState(){	
 	if (init_msg_sent == false && isTransportReady() ) {
-		DEBUG_PRINTLN("_initialState START");
+		DEBUG_PRINTLN("______ initialState START ______");
 
 	   	init_msg_sent = true;
 		Switch(loadState(CHILD_ID_RELAY)); 	// start as lastsaved
@@ -189,7 +189,7 @@ void InitialState(){
 		DEBUG_PRINT("<-- Sending Relay State : "); 
 		DEBUG_PRINTLN(is_on); 
 
-		DEBUG_PRINTLN("_initialState END");
+		DEBUG_PRINTLN("______ initialState END   ______");
 	}
 }
 
