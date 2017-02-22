@@ -8,7 +8,7 @@
 	and send the room temperature using a built-in Sensor.
 
 	** Compilation **
-		- needs MySensors version 2.0+
+		- needs MySensors version 2.1.0+
 */
 
 // debug #################################################################################
@@ -28,7 +28,7 @@
 #define MY_TRANSPORT_SANITY_CHECK_INTERVAL_MS (15*60*1000ul)	// how often to  check if transport is available (already set as default)
 #define MY_TRANSPORT_TIMEOUT_EXT_FAILURE_STATE (5*60*1000ul)	//  how often to reconnect if no transport
 
-#define MY_REPEATER_FEATURE		// set as Repeater
+#define MY_REPEATER_FEATURE										// set as Repeater
 
 #define PIN_RELAY			2
 #define PIN_ONEWIRE			3
@@ -64,6 +64,7 @@ unsigned long next_report 	= 3000; // last temperature report time : start 3s af
 const float temp_offset		= -1.0;	// calibrate DS18B20 deviation
 boolean init_msg_sent		= false; // inited ?
 
+
 // objects ###############################################################################
 OneWire				oneWire(PIN_ONEWIRE);
 DallasTemperature	dallas(&oneWire);
@@ -77,6 +78,7 @@ MyMessage 			msgTemp(	CHILD_ID_TEMP,	V_TEMP);
 // ###### Setup ##########################################################################
 void setup()  {
 }
+
 
 // ###### Loop ##########################################################################
 void loop() {
@@ -102,7 +104,6 @@ void loop() {
 
 
 
-
 // #######################################################################################
 // ############################# FUNCTIONS ###############################################
 // #######################################################################################
@@ -119,6 +120,7 @@ void presentation(){
 
 	DEBUG_PRINTLN("---- presentation END   -------");
 }
+
 
 // --------------------------------------------------------------------
 void receive(const MyMessage &message){
@@ -137,6 +139,7 @@ void receive(const MyMessage &message){
 		LedAnim(PIN_LED_RED);
    }
 }
+
 
 // --------------------------------------------------------------------
 void before(){
@@ -178,6 +181,7 @@ void before(){
 
 }
 
+
 // --------------------------------------------------------------------
 void InitialState(){	
 	if (init_msg_sent == false && isTransportReady() ) {
@@ -193,6 +197,7 @@ void InitialState(){
 	}
 }
 
+
 // --------------------------------------------------------------------
 void Toggle(){
 	if(is_on){
@@ -202,6 +207,7 @@ void Toggle(){
 		Switch(true);
 	}
 }
+
 
 // --------------------------------------------------------------------
 void Switch(boolean state){
@@ -223,6 +229,7 @@ void Switch(boolean state){
 	
 	DEBUG_PRINT("### Switched to : "); DEBUG_PRINT(is_on); DEBUG_PRINTLN(" ###");
 }
+
 
 // --------------------------------------------------------------------
 void ProcessTemperature(){
@@ -254,6 +261,7 @@ void ProcessTemperature(){
 		}
 	}
 }
+
 
 // --------------------------------------------------------------------
 void LedAnim(byte led){
