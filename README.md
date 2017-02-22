@@ -49,7 +49,7 @@ For simplicity, the radio module wiring is not described there. Please refer to 
 ![wiring](images/wiring.png)
 
 
-## Project Imaages
+## Project Images
 
 Here is how I've made this...
 
