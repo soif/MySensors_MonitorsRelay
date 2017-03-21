@@ -10,7 +10,7 @@
 	and send the room temperature using a built-in Sensor.
 
 	** Compilation **
-		- needs MySensors version 2.1.0+
+		- needs MySensors version 2.11.0+
 */
 
 // debug #################################################################################
@@ -19,17 +19,17 @@
 
 // Define ################################################################################
 #define INFO_NAME "MonitorsRelay"
-#define INFO_VERS "2.1.00"
+#define INFO_VERS "2.11.00"
 
 // MySensors
 #define MY_RADIO_NRF24		// radio module used
 #define MY_NODE_ID 101		// Node ID
 
 //https://forum.mysensors.org/topic/5778/mys-library-startup-control-after-onregistration/7
-#define MY_TRANSPORT_WAIT_READY_MS (5*1000ul)					// how long to wait for transport ready at boot
+#define MY_TRANSPORT_WAIT_READY_MS				(	5*1000ul)	// how long to wait for transport ready at boot
 #define MY_TRANSPORT_SANITY_CHECK								// check if transport is available
-#define MY_TRANSPORT_SANITY_CHECK_INTERVAL_MS (15*60*1000ul)	// how often to  check if transport is available (already set as default)
-#define MY_TRANSPORT_TIMEOUT_EXT_FAILURE_STATE (5*60*1000ul)	//  how often to reconnect if no transport
+#define MY_TRANSPORT_SANITY_CHECK_INTERVAL_MS	(15*60*1000ul)	// how often to  check if transport is available (already set as default)
+#define MY_TRANSPORT_TIMEOUT_EXT_FAILURE_STATE	(5*	60*1000ul)	//  how often to reconnect if no transport
 
 #define MY_REPEATER_FEATURE										// set as Repeater
 
