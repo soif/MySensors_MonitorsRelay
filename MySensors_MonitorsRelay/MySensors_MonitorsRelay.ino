@@ -1,3 +1,5 @@
+#include <Arduino.h>
+
 /*
 	MySensors MonitorsRelay
 	https://github.com/soif/MySensors_MonitorsRelay
