@@ -1,5 +1,3 @@
-#include <Arduino.h>
-
 /*
 	MySensors MonitorsRelay
 	https://github.com/soif/MySensors_MonitorsRelay
@@ -79,7 +77,6 @@ MyMessage 			msgRelay(	CHILD_ID_RELAY,	V_LIGHT);
 MyMessage 			msgTemp(	CHILD_ID_TEMP,	V_TEMP);
 
 
-
 // ###### Setup ##########################################################################
 void setup()  {
 }
@@ -94,11 +91,12 @@ void loop() {
 		boolean changed = debouncer.update();
 		int button_state = debouncer.read();
 		if (changed && button_state == 0) {
-			DEBUG_PRINTLN("BUTTON Toggle !!");
+			DEBUG_PRINTLN("");
+			DEBUG_PRINTLN("# BUTTON Toggle !");
 			Toggle();
-			send(msgRelay.set(is_on), true); // Send new state and request ack back
-			DEBUG_PRINT("<-- Sending Relay State : ");
+			DEBUG_PRINT(" --> Sending Relay State : ");
 			DEBUG_PRINTLN(is_on);
+			send(msgRelay.set(is_on), true); // Send new state and request ack back
 		}
 
 		// Dallas 1820 Sensor ---------------
@@ -108,34 +106,33 @@ void loop() {
 
 
 
-
 // #######################################################################################
 // ############################# FUNCTIONS ###############################################
 // #######################################################################################
 
-
 // --------------------------------------------------------------------
 void presentation(){
-	DEBUG_PRINTLN("---- presentation START -------");
+	DEBUG_PRINTLN("");
+	DEBUG_PRINTLN("**** Presentation START *******");
 	sendSketchInfo(INFO_NAME , INFO_VERS );
 
 	present(CHILD_ID_RELAY, 	S_LIGHT);
 	present(CHILD_ID_TEMP,	S_TEMP);
 //	metric = getConfig().isMetric;
 
-	DEBUG_PRINTLN("---- presentation END   -------");
+	DEBUG_PRINTLN("**** Presentation END   *******");
 }
 
 
 // --------------------------------------------------------------------
 void receive(const MyMessage &message){
 	if (message.isAck() ) {
-		DEBUG_PRINTLN("--> ACK from gateway IGNORED !");
+		DEBUG_PRINTLN(" <-- ACK from gateway IGNORED !");
 		return;
 	}
 
 	if (message.type == V_LIGHT) {
-		DEBUG_PRINT("--> Receiving change for sensor: ");
+		DEBUG_PRINT(" <-- Receiving change for sensor: ");
 		DEBUG_PRINT(message.sensor);
 		DEBUG_PRINT(", New state: ");
 		DEBUG_PRINTLN(message.getBool());
@@ -149,9 +146,9 @@ void receive(const MyMessage &message){
 // --------------------------------------------------------------------
 void before(){
 	Serial.begin(115000);
+	DEBUG_PRINTLN("");
 	DEBUG_PRINTLN("++++++++++++++");
 	DEBUG_PRINTLN(" Booting...");
-	DEBUG_PRINTLN("++++++++++++++");
 
 	pinMode(PIN_LED_BOOT,	OUTPUT);
 	digitalWrite(PIN_LED_BOOT,	LOW);
@@ -182,23 +179,23 @@ void before(){
  	dallas.begin();
 	dallas.setWaitForConversion(false);
 
-	DEBUG_PRINTLN("++ Boot END ++");
-
+	DEBUG_PRINTLN("++++++++++++++");
 }
 
 
 // --------------------------------------------------------------------
 void InitialState(){
 	if (init_msg_sent == false && isTransportReady() ) {
-		DEBUG_PRINTLN("______ initialState START ______");
+		DEBUG_PRINTLN("");
+		DEBUG_PRINTLN("______ InitialState START ______");
 
 	   	init_msg_sent = true;
 		Switch(loadState(CHILD_ID_RELAY)); 	// start as lastsaved
 		send(msgRelay.set(is_on), true); // Send new state and request ack back
-		DEBUG_PRINT("<-- Sending Relay State : ");
+		DEBUG_PRINT(" --> Sending Relay State : ");
 		DEBUG_PRINTLN(is_on);
 
-		DEBUG_PRINTLN("______ initialState END   ______");
+		DEBUG_PRINTLN("______ InitialState END   ______");
 	}
 }
 
@@ -243,22 +240,22 @@ void ProcessTemperature(){
 		next_report +=  (long) REPORT_TEMP_SEC * 1000 ;
 		//Serial.print("next = "); Serial.println(next_report);
 
-		DEBUG_PRINT("Sensing Temperature... ");
-
+		DEBUG_PRINTLN("");
 		dallas.requestTemperatures(); // Send the command to get temperatures
 		wait( dallas.millisToWaitForConversion(dallas.getResolution()) + 10 ); // make sure we get the latest temps
 		float dallasTemp = dallas.getTempCByIndex(0) + temp_offset;
 
+		DEBUG_PRINT("# Sensing Temperature... ");
 		DEBUG_PRINTLN(dallasTemp);
 
 		if (! isnan(dallasTemp)) {
 			dallasTemp = ( (int) (dallasTemp * 10 ) )/ 10.0 ; //rounded to 1 dec
-			if (dallasTemp != lastDallasTemp	&& dallasTemp != -127.00 && dallasTemp != 85.0) {
+			if (dallasTemp != lastDallasTemp && dallasTemp != -127.00 && dallasTemp != 85.0) {
 				if (!metric) {
 					dallasTemp = dallasTemp * 1.8 + 32.0;
 				}
 				lastDallasTemp = dallasTemp;
-				DEBUG_PRINT("<--- Sending New Temperature : ");
+				DEBUG_PRINT(" --> Sending New Temperature : ");
 				DEBUG_PRINTLN(dallasTemp);
 				send(msgTemp.set(dallasTemp, true)); // Send new temp and request ack back
 				LedAnim(PIN_LED_GREEN);
@@ -272,7 +269,7 @@ void ProcessTemperature(){
 void LedAnim(byte led){
 	//remember led state
 	boolean initial = false;
-	if( ( led == PIN_LED_GREEN && is_on) || led == PIN_LED_RED && !is_on ){
+	if( ( led == PIN_LED_GREEN && is_on) || ( led == PIN_LED_RED && !is_on ) ){
 		initial= true;
 	}
 
