@@ -6,7 +6,7 @@
 	Copyright 2014 François Déchery
 
 	** Description **
-	This Arduino ProMini (5V) based project is a MySensors  node which controls a relay, with a toggle button, 2 Status Leds 
+	This Arduino ProMini (5V) based project is a MySensors  node which controls a relay, with a toggle button, 2 Status Leds
 	and send the room temperature using a built-in Sensor.
 
 	** Compilation **
@@ -14,7 +14,8 @@
 */
 
 // debug #################################################################################
-#define MY_DEBUG	// Comment/uncomment to remove/show debug (May overflow Arduino memory when set)
+#define OWN_DEBUG	// Comment/uncomment to remove/show debug (May overflow Arduino memory when set)
+#define MY_DEBUG	// Comment/uncomment to remove/show MySensors debug messages (May overflow Arduino memory when set)
 
 // Define ################################################################################
 #define INFO_NAME "MonitorsRelay"
@@ -49,10 +50,12 @@
 
 
 // includes ##############################################################################
+#include "own_debug.h"
+
+// MySensors
 #include <SPI.h>
 #include <MySensors.h>
 
-#include "debug.h"
 #include <Bounce2.h>
 #include <DallasTemperature.h>
 #include <OneWire.h>
@@ -70,7 +73,7 @@ boolean init_msg_sent		= false; // inited ?
 // objects ###############################################################################
 OneWire				oneWire(PIN_ONEWIRE);
 DallasTemperature	dallas(&oneWire);
-Bounce 				debouncer = Bounce(); 
+Bounce 				debouncer = Bounce();
 
 MyMessage 			msgRelay(	CHILD_ID_RELAY,	V_LIGHT);
 MyMessage 			msgTemp(	CHILD_ID_TEMP,	V_TEMP);
@@ -94,14 +97,14 @@ void loop() {
 			DEBUG_PRINTLN("BUTTON Toggle !!");
 			Toggle();
 			send(msgRelay.set(is_on), true); // Send new state and request ack back
-			DEBUG_PRINT("<-- Sending Relay State : "); 
-			DEBUG_PRINTLN(is_on); 
+			DEBUG_PRINT("<-- Sending Relay State : ");
+			DEBUG_PRINTLN(is_on);
 		}
 
 		// Dallas 1820 Sensor ---------------
 		ProcessTemperature();
 	}
-} 
+}
 
 
 
@@ -116,8 +119,8 @@ void presentation(){
 	DEBUG_PRINTLN("---- presentation START -------");
 	sendSketchInfo(INFO_NAME , INFO_VERS );
 
-	present(CHILD_ID_RELAY, 	S_LIGHT);  
-	present(CHILD_ID_TEMP,	S_TEMP); 
+	present(CHILD_ID_RELAY, 	S_LIGHT);
+	present(CHILD_ID_TEMP,	S_TEMP);
 //	metric = getConfig().isMetric;
 
 	DEBUG_PRINTLN("---- presentation END   -------");
@@ -185,15 +188,15 @@ void before(){
 
 
 // --------------------------------------------------------------------
-void InitialState(){	
+void InitialState(){
 	if (init_msg_sent == false && isTransportReady() ) {
 		DEBUG_PRINTLN("______ initialState START ______");
 
 	   	init_msg_sent = true;
 		Switch(loadState(CHILD_ID_RELAY)); 	// start as lastsaved
 		send(msgRelay.set(is_on), true); // Send new state and request ack back
-		DEBUG_PRINT("<-- Sending Relay State : "); 
-		DEBUG_PRINTLN(is_on); 
+		DEBUG_PRINT("<-- Sending Relay State : ");
+		DEBUG_PRINTLN(is_on);
 
 		DEBUG_PRINTLN("______ initialState END   ______");
 	}
@@ -221,14 +224,14 @@ void Switch(boolean state){
 	else{
 		digitalWrite(PIN_RELAY,		RELAY_OFF);
 		digitalWrite(PIN_LED_RED,	HIGH);
-		digitalWrite(PIN_LED_GREEN,	LOW);		
+		digitalWrite(PIN_LED_GREEN,	LOW);
 	}
 
 	is_on = state;
 
 	// Store state in eeprom
 	saveState(CHILD_ID_RELAY, is_on);
-	
+
 	DEBUG_PRINT("### Switched to : "); DEBUG_PRINT(is_on); DEBUG_PRINTLN(" ###");
 }
 
@@ -244,10 +247,10 @@ void ProcessTemperature(){
 
 		dallas.requestTemperatures(); // Send the command to get temperatures
 		wait( dallas.millisToWaitForConversion(dallas.getResolution()) + 10 ); // make sure we get the latest temps
-		float dallasTemp = dallas.getTempCByIndex(0) + temp_offset;	
+		float dallasTemp = dallas.getTempCByIndex(0) + temp_offset;
 
 		DEBUG_PRINTLN(dallasTemp);
-	
+
 		if (! isnan(dallasTemp)) {
 			dallasTemp = ( (int) (dallasTemp * 10 ) )/ 10.0 ; //rounded to 1 dec
 			if (dallasTemp != lastDallasTemp	&& dallasTemp != -127.00 && dallasTemp != 85.0) {
@@ -255,7 +258,7 @@ void ProcessTemperature(){
 					dallasTemp = dallasTemp * 1.8 + 32.0;
 				}
 				lastDallasTemp = dallasTemp;
-				DEBUG_PRINT("<--- Sending New Temperature : "); 
+				DEBUG_PRINT("<--- Sending New Temperature : ");
 				DEBUG_PRINTLN(dallasTemp);
 				send(msgTemp.set(dallasTemp, true)); // Send new temp and request ack back
 				LedAnim(PIN_LED_GREEN);
@@ -272,7 +275,7 @@ void LedAnim(byte led){
 	if( ( led == PIN_LED_GREEN && is_on) || led == PIN_LED_RED && !is_on ){
 		initial= true;
 	}
-	
+
 	for (int i=0; i <=2; i++){
 		digitalWrite(led, ! initial);
 		wait(50);
