@@ -21,7 +21,7 @@
 
 // MySensors
 #define MY_RADIO_NRF24		// radio module used
-#define MY_NODE_ID 101		// Node ID
+#define MY_NODE_ID 		101	// Node ID
 
 //https://forum.mysensors.org/topic/5778/mys-library-startup-control-after-onregistration/7
 #define MY_TRANSPORT_WAIT_READY_MS				(	5*1000ul)	// how long to wait for transport ready at boot
